@@ -26,11 +26,14 @@ export default function Step3({ reduceStep }) {
     setLoading(true);
 
     try {
-      const res = await fetch("https://foodapp-back-k58d.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://foodapp-back-1p78.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        },
+      );
 
       console.log("STATUS =", res.status);
 

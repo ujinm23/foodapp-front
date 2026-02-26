@@ -10,10 +10,18 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import CategorySkeleton from "../_components/Skeleton/CategorySkeleton";
+import Image from "next/image";
 
 export default function MainPage({ isCartOpen, openCart, closeCart }) {
   const router = useRouter();
-  const { cartItems, addToCart, updateQuantity, removeFromCart, clearCart, getTotalPrice } = useCart();
+  const {
+    cartItems,
+    addToCart,
+    updateQuantity,
+    removeFromCart,
+    clearCart,
+    getTotalPrice,
+  } = useCart();
   const { user } = useAuth();
 
   const [categories, setCategories] = useState([]);
@@ -32,7 +40,7 @@ export default function MainPage({ isCartOpen, openCart, closeCart }) {
       try {
         setLoading(true);
         const res = await axios.get(
-          "https://foodapp-back-k58d.onrender.com/api/categories"
+          "https://foodapp-back-1p78.onrender.com/api/categories",
         );
         setCategories(res.data);
       } catch (err) {
@@ -113,17 +121,17 @@ export default function MainPage({ isCartOpen, openCart, closeCart }) {
         />
       )}
 
-      <div className="w-full h-[570px] flex justify-center  bg-[#18181B]">
-        <div className="w-full max-w-[1440px] h-full">
-          <img
-            src="/BG.svg"
-            alt="background"
-            className="w-full h-full object-cover"
-          />
-        </div>
+      <div className="h-180 w-auto relative flex">
+        <Image
+          src="/BG.svg"
+          fill
+          alt="the home picture"
+          className="object-cover "
+          loading="eager"
+        />
       </div>
 
-      <div className="bg-[#18181B] flex justify-center">
+      <div className="bg-[#404040] flex justify-center">
         <div className="w-full max-w-[1440px] py-[88px] px-10">
           {loading ? (
             <>
@@ -152,7 +160,7 @@ export default function MainPage({ isCartOpen, openCart, closeCart }) {
                       <button
                         onClick={() => setSelectedDish(dish)}
                         className="absolute top-44 right-6 bg-white text-red-500 
-                                   border cursor-pointer w-8 h-8 rounded-full 
+                                   border cursor-pointer w-11 h-11 rounded-full 
                                    flex items-center justify-center 
                                    hover:bg-red-500 hover:text-white transition"
                       >
@@ -180,11 +188,7 @@ export default function MainPage({ isCartOpen, openCart, closeCart }) {
       <div>
         {showToast && <Toast message="Food is being added to the cart!" />}
       </div>
-      <CartDrawer
-        isOpen={isCartOpen}
-        onClose={closeCart}
-        orders={orders}
-      />
+      <CartDrawer isOpen={isCartOpen} onClose={closeCart} orders={orders} />
 
       {showSuccess && (
         <SuccessOrderModal

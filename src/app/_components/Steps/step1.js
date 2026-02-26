@@ -21,11 +21,14 @@ export default function Step1({ increaseStep }) {
     console.log("Step1 INCREASE email =", email);
 
     try {
-        const res = await fetch("https://foodapp-back-k58d.onrender.com/api/auth/check-email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const res = await fetch(
+        "https://foodapp-back-1p78.onrender.com/api/auth/check-email",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        },
+      );
 
       // Content-Type шалгах
       const contentType = res.headers.get("content-type");
@@ -114,7 +117,7 @@ export default function Step1({ increaseStep }) {
 
           <p className="text-[#71717A] text-center">
             Already have an account?{" "}
-            <span 
+            <span
               className="text-[#2563EB] cursor-pointer hover:underline"
               onClick={() => router.push("/login")}
             >

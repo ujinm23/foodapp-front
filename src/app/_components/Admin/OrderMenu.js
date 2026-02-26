@@ -42,7 +42,9 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
 
   const fetchOrders = async () => {
     try {
-      const res = await fetch("https://foodapp-back-k58d.onrender.com/api/orders");
+      const res = await fetch(
+        "https://foodapp-back-1p78.onrender.com/api/orders",
+      );
       const response = await res.json();
       // Backend returns { success: true, data: orders }
       setOrders(response.data || response || []);
@@ -56,12 +58,12 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
   const updateStatus = async (orderId, newStatus) => {
     try {
       const res = await fetch(
-        `https://foodapp-back-k58d.onrender.com/api/orders/${orderId}/status`,
+        `https://foodapp-back-1p78.onrender.com/api/orders/${orderId}/status`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ status: newStatus.toLowerCase() }),
-        }
+        },
       );
 
       const response = await res.json();
@@ -74,8 +76,10 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
       // Захиалгын жагсаалтыг шинэчлэх
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus.toLowerCase() } : order
-        )
+          order._id === orderId
+            ? { ...order, status: newStatus.toLowerCase() }
+            : order,
+        ),
       );
     } catch (err) {
       console.error("Status update error:", err);
@@ -96,7 +100,7 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
   const getPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = isMobile ? 3 : 5;
-    
+
     if (totalPages <= maxVisiblePages) {
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
@@ -120,10 +124,12 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
   };
 
   return (
-    <div className={`mx-auto w-full max-w-[1440px] px-4 md:px-8 ${isMobile ? "flex-col" : "flex gap-10 pr-10"}`}>
+    <div
+      className={`mx-auto w-full max-w-[1440px] px-4 md:px-8 ${isMobile ? "flex-col" : "flex gap-10 pr-10"}`}
+    >
       {/* Sidebar */}
       <div className="w-[205px] p-9">
-        <div 
+        <div
           onClick={() => router.push("/")}
           className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
         >
@@ -158,7 +164,9 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
       </div>
 
       {/* Orders content */}
-      <div className={`p-6 bg-white rounded-xl ${isMobile ? "w-full" : "w-[1171px]"}`}>
+      <div
+        className={`p-6 bg-white rounded-xl ${isMobile ? "w-full" : "w-[1171px]"}`}
+      >
         {/* HEADER */}
         <div className="flex justify-between items-center border rounded-xl px-6 py-4 mb-6">
           <div>
@@ -208,46 +216,62 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
                 currentOrders.map((order, i) => (
                   <tr key={order._id} className="border-b hover:bg-gray-50">
                     <td className="p-3">{startIndex + i + 1}</td>
-                    <td className="p-3">
-                      {order.user?.email || "N/A"}
-                    </td>
+                    <td className="p-3">{order.user?.email || "N/A"}</td>
 
                     <td className="p-3">
                       <div className="flex flex-col gap-1">
                         <span className="text-xs text-gray-600">
                           {order.foodOrderItems?.length || 0} items
                         </span>
-                        {order.foodOrderItems && order.foodOrderItems.length > 0 && (
-                          <div className="text-xs text-gray-500 max-w-[200px]">
-                            {order.foodOrderItems.slice(0, 2).map((item, idx) => {
-                              // Debug: console.log хийх (production-д арилгах)
-                              if (idx === 0 && !item.food?.foodName && !item.food?.name) {
-                                console.log("Food item debug:", {
-                                  item,
-                                  food: item.food,
-                                  foodType: typeof item.food,
-                                  foodKeys: item.food ? Object.keys(item.food) : null
-                                });
-                              }
-                              
-                              const foodName = item.food?.foodName || 
-                                             item.food?.name || 
-                                             (typeof item.food === 'object' && item.food !== null ? JSON.stringify(item.food).substring(0, 30) : null) ||
-                                             (typeof item.food === 'string' ? item.food : null) ||
-                                             "Хоолны нэр олдсонгүй";
-                              return (
-                                <div key={idx} className="truncate">
-                                  • {foodName}
+                        {order.foodOrderItems &&
+                          order.foodOrderItems.length > 0 && (
+                            <div className="text-xs text-gray-500 max-w-[200px]">
+                              {order.foodOrderItems
+                                .slice(0, 2)
+                                .map((item, idx) => {
+                                  // Debug: console.log хийх (production-д арилгах)
+                                  if (
+                                    idx === 0 &&
+                                    !item.food?.foodName &&
+                                    !item.food?.name
+                                  ) {
+                                    console.log("Food item debug:", {
+                                      item,
+                                      food: item.food,
+                                      foodType: typeof item.food,
+                                      foodKeys: item.food
+                                        ? Object.keys(item.food)
+                                        : null,
+                                    });
+                                  }
+
+                                  const foodName =
+                                    item.food?.foodName ||
+                                    item.food?.name ||
+                                    (typeof item.food === "object" &&
+                                    item.food !== null
+                                      ? JSON.stringify(item.food).substring(
+                                          0,
+                                          30,
+                                        )
+                                      : null) ||
+                                    (typeof item.food === "string"
+                                      ? item.food
+                                      : null) ||
+                                    "Хоолны нэр олдсонгүй";
+                                  return (
+                                    <div key={idx} className="truncate">
+                                      • {foodName}
+                                    </div>
+                                  );
+                                })}
+                              {order.foodOrderItems.length > 2 && (
+                                <div className="text-gray-400">
+                                  +{order.foodOrderItems.length - 2} more
                                 </div>
-                              );
-                            })}
-                            {order.foodOrderItems.length > 2 && (
-                              <div className="text-gray-400">
-                                +{order.foodOrderItems.length - 2} more
-                              </div>
-                            )}
-                          </div>
-                        )}
+                              )}
+                            </div>
+                          )}
                       </div>
                     </td>
 
@@ -260,22 +284,26 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
                     <td className="p-3">${order.totalPrice || 0}</td>
 
                     <td className="p-3 text-xs text-gray-500 max-w-[220px] truncate">
-                      {order.address || order.user?.address || "Хаяг оруулаагүй"}
+                      {order.address ||
+                        order.user?.address ||
+                        "Хаяг оруулаагүй"}
                     </td>
 
                     <td className="p-3">
                       <select
                         value={order.status || "pending"}
-                        onChange={(e) => updateStatus(order._id, e.target.value)}
+                        onChange={(e) =>
+                          updateStatus(order._id, e.target.value)
+                        }
                         className={`px-3 py-1 rounded-full text-xs border
                         ${
                           order.status === "pending"
                             ? "border-red-400 text-red-500"
                             : order.status === "delivered"
-                            ? "border-green-400 text-green-600"
-                            : order.status === "cancelled"
-                            ? "border-gray-400 text-gray-600"
-                            : "border-gray-400"
+                              ? "border-green-400 text-green-600"
+                              : order.status === "cancelled"
+                                ? "border-gray-400 text-gray-600"
+                                : "border-gray-400"
                         }`}
                       >
                         <option value="pending">Pending</option>

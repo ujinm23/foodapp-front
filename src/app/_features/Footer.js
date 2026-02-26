@@ -6,23 +6,20 @@ import Instagram from "../_icons/Instagram";
 const Footer = () => {
   return (
     <div className="w-full bg-[#18181B] pt-[60px] flex justify-center">
-      <div className="w-full max-w-[1440px]">
-        <div className="w-full h-[92px] bg-[#EF4444] flex items-center gap-[34px]">
-          <p className="text-[30px] font-semibold text-white ml-[98px]">
-            Fresh fast delivered
-          </p>
-          <p className="text-[30px] font-semibold text-white">
-            Fresh fast delivered
-          </p>
-          <p className="text-[30px] font-semibold text-white">
-            Fresh fast delivered
-          </p>
-          <p className="text-[30px] font-semibold text-white">
-            Fresh fast delivered
-          </p>
+      <div className="w-full flex flex-col items-center">
+        <div className="w-auto h-[92px] bg-[#EF4444] flex text-white pl-[98px] font-semibold text-[30px] gap-[34px] overflow-hidden items-center">
+          <div className="flex gap-[34px] whitespace-nowrap ">
+            <h2>Fresh fast delivered </h2>
+            <h2>Fresh fast delivered </h2>
+            <h2>Fresh fast delivered </h2>
+            <h2>Fresh fast delivered </h2>
+            <h2>Fresh fast delivered </h2>
+            <h2>Fresh fast delivered </h2>
+            <h2>Fresh fast delivered </h2>
+          </div>
         </div>
 
-        <div className="w-full pl-[88px] pr-[88px] mt-[76px] flex justify-between">
+        <div className="w-360 pl-[88px] pr-[88px] mt-[76px] flex justify-between">
           <div>
             <div className="flex justify-center">
               <HutIcon />

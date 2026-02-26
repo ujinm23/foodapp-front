@@ -36,11 +36,14 @@ export default function Step2({ increaseStep, reduceStep, email }) {
     setErrorMsg("");
 
     try {
-       const res = await fetch("https://foodapp-back-k58d.onrender.com/api/auth/sign-up", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await fetch(
+        "https://foodapp-back-1p78.onrender.com/api/auth/sign-up",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        },
+      );
 
       // Content-Type шалгах
       const contentType = res.headers.get("content-type");
@@ -80,7 +83,7 @@ export default function Step2({ increaseStep, reduceStep, email }) {
       if (err instanceof SyntaxError) {
         setErrorMsg("Server-ийн хариу буруу байна. Дахин оролдоно уу.");
       } else {
-      setErrorMsg("Server error. Try again.");
+        setErrorMsg("Server error. Try again.");
       }
     }
   };
@@ -118,8 +121,8 @@ export default function Step2({ increaseStep, reduceStep, email }) {
                   strength === "weak"
                     ? "text-red-300"
                     : strength === "medium"
-                    ? "text-yellow-500"
-                    : "text-green-600"
+                      ? "text-yellow-500"
+                      : "text-green-600"
                 }`}
               >
                 {strength === "weak" && "Weak password (too easy)"}
@@ -149,7 +152,11 @@ export default function Step2({ increaseStep, reduceStep, email }) {
           </div>
 
           <div className="flex items-center gap-2 mb-6">
-            <Checkbox id="show" checked={show} onCheckedChange={(v) => setShow(v)} />
+            <Checkbox
+              id="show"
+              checked={show}
+              onCheckedChange={(v) => setShow(v)}
+            />
             <label
               htmlFor="show"
               className="text-sm text-gray-600 cursor-pointer"
@@ -172,7 +179,7 @@ export default function Step2({ increaseStep, reduceStep, email }) {
 
           <p className="text-[#71717A] text-center">
             Already have an account?{" "}
-            <span 
+            <span
               className="text-[#2563EB] cursor-pointer hover:underline"
               onClick={() => router.push("/login")}
             >

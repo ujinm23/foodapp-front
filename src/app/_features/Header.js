@@ -54,9 +54,9 @@ export default function Header({ openCart }) {
   };
 
   return (
-    <div className="w-full bg-[#18181B] h-[68px] flex justify-center">
-      <div className="w-full max-w-[1440px] h-full flex justify-between items-center px-[88px]">
-        <div 
+    <div className="w-auto h-17  bg-[#18181B]  flex justify-between px-22 items-center">
+      <div className="w-full h-full flex justify-between items-center">
+        <div
           onClick={handleLogoClick}
           className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
         >

@@ -37,9 +37,12 @@ export default function DishModal({ onClose, onAddDish, categoryName }) {
       setUploading(true);
       try {
         const base64 = reader.result;
-       const res = await axios.post("https://foodapp-back-k58d.onrender.com/api/upload", {
-          data: base64,
-        });
+        const res = await axios.post(
+          "https://foodapp-back-1p78.onrender.com/api/upload",
+          {
+            data: base64,
+          },
+        );
 
         setImage(res.data.url); // ✔ Cloudinary URL боллоо
       } catch (err) {
