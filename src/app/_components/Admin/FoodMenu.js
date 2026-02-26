@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import SqrWhite from "@/app/_icons/sqrblack";
 import CarWhiteIcon from "@/app/_icons/CarWhiteIcon";
 import OrdersPage from "./OrderMenu";
+import Sidebar from "./SideBar";
 
 export default function Order() {
   const router = useRouter();
@@ -214,7 +215,7 @@ export default function Order() {
           {showCategoryModal && (
             <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 overflow-y-auto">
               <div
-                className={`bg-white p-6 rounded-xl ${isMobile ? "w-[90%] max-w-[400px] m-4" : "w-[400px]"} relative`}
+                className={`bg-[#F4F4F5] p-6 rounded-xl ${isMobile ? "w-[90%] max-w-[400px] m-4" : "w-[400px]"} relative`}
               >
                 <button
                   onClick={() => setShowCategoryModal(false)}
@@ -253,56 +254,19 @@ export default function Order() {
           )}
 
           <div
-            className={`mx-auto w-full max-w-[1440px] px-4 md:px-8 ${isMobile ? "flex-col h-screen flex" : "flex gap-10 pr-10"}`}
+            className={`mx-auto w-full bg-[#F4F4F5] max-w-[1440px] px-4 md:px-8 ${isMobile ? "flex-col h-screen flex" : "flex gap-10 pr-10"}`}
           >
-            <div
-              className={`${isMobile ? "w-full p-4 flex-shrink-0 bg-white border-b" : "w-[205px] p-9"}`}
-            >
-              <div
-                onClick={() => router.push("/")}
-                className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-              >
-                <HutIcon />
-                <div>
-                  <CompanyNew />
-                  <p className="text-xs text-gray-500">Swift delivery</p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setActiveTab("FoodMenu")}
-                className={`w-full p-2 mt-10 cursor-pointer rounded-full flex gap-2 justify-center items-center ${
-                  activeTab === "FoodMenu"
-                    ? "bg-black text-white"
-                    : "bg-gray-200 text-black"
-                }`}
-              >
-                {activeTab === "FoodMenu" ? <Sqr /> : <SqrWhite />}
-                Food Menu
-              </button>
-
-              <button
-                onClick={() => setActiveTab("OrderMenu")}
-                className={`w-full p-2 mt-4 cursor-pointer rounded-full flex gap-2 justify-center items-center ${
-                  activeTab === "OrderMenu"
-                    ? "bg-black text-white"
-                    : " text-black"
-                }`}
-              >
-                {activeTab === "OrderMenu" ? <CarWhiteIcon /> : <CarBlack />}
-                Orders
-              </button>
-            </div>
+            <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
             <div
-              className={`${isMobile ? "w-full mt-4 overflow-y-auto flex-1 scrollbar-hide" : "w-full mt-8"}`}
+              className={`${isMobile ? "w-full mt-4 overflow-y-auto bg-white flex-1 scrollbar-hide" : "w-full mt-8"}`}
             >
               <div className="flex justify-end mb-6">
                 <Avatar />
               </div>
 
               <div
-                className={`border rounded-xl ${isMobile ? "p-4 mb-4" : "p-6 mb-6"}`}
+                className={`border bg-white  rounded-xl ${isMobile ? "p-4 mb-4" : "p-6 mb-6"}`}
               >
                 <h1 className="text-xl font-semibold mb-4">Dishes category</h1>
 

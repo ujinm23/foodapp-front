@@ -9,6 +9,7 @@ import Sqr from "@/app/_icons/squer";
 import CarBlack from "@/app/_icons/Car";
 import OrderCN from "@/app/_icons/ordercn";
 import OrderTableSkeleton from "../Skeleton/OrderTableSkeleton";
+import Sidebar from "./SideBar";
 
 export default function OrdersPage({ activeTab, setActiveTab }) {
   const router = useRouter();
@@ -125,50 +126,17 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
 
   return (
     <div
-      className={`mx-auto w-full max-w-[1440px] px-4 md:px-8 ${isMobile ? "flex-col" : "flex gap-10 pr-10"}`}
+      className={`mx-auto w-full bg-[#F4F4F5]  max-w-[1440px] px-4 md:px-8 ${isMobile ? "flex-col" : "flex gap-10 pr-10"}`}
     >
       {/* Sidebar */}
-      <div className="w-[205px] p-9">
-        <div
-          onClick={() => router.push("/")}
-          className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-        >
-          <div className="w-10 h-10">
-            <HutIcon />
-          </div>
-          <div className="w-[81px] h-7">
-            <OrderCN />
-            <p className="text-xs text-gray-500">Swift delivery</p>
-          </div>
-        </div>
-
-        <button
-          onClick={() => setActiveTab("FoodMenu")}
-          className={`w-full p-2 mt-10 rounded-full flex gap-2 justify-center items-center ${
-            activeTab === "FoodMenu" ? "bg-black text-white" : ""
-          }`}
-        >
-          {activeTab === "FoodMenu" ? <Sqr /> : <SqrWhite />}
-          Food Menu
-        </button>
-
-        <button
-          onClick={() => setActiveTab("OrderMenu")}
-          className={`w-full p-2 mt-4 rounded-full flex gap-2 justify-center items-center ${
-            activeTab === "OrderMenu" ? "bg-black text-white" : "bg-gray-200"
-          }`}
-        >
-          {activeTab === "OrderMenu" ? <CarWhiteIcon /> : <CarBlack />}
-          Orders
-        </button>
-      </div>
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
       {/* Orders content */}
       <div
-        className={`p-6 bg-white rounded-xl ${isMobile ? "w-full" : "w-[1171px]"}`}
+        className={`p-6 bg-[#F4F4F5] rounded-xl ${isMobile ? "w-full" : "w-[1171px]"}`}
       >
         {/* HEADER */}
-        <div className="flex justify-between items-center border rounded-xl px-6 py-4 mb-6">
+        <div className="flex justify-between items-center border rounded-xl px-6 py-4 mb-6 bg-white">
           <div>
             <h1 className="text-xl font-semibold">Orders</h1>
             <p className="text-sm text-gray-500">{orders.length} items</p>
@@ -190,7 +158,7 @@ export default function OrdersPage({ activeTab, setActiveTab }) {
         </div>
 
         {/* TABLE */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto bg-white">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
