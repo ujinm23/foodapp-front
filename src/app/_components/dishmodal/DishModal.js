@@ -71,52 +71,55 @@ export default function DishModal({ onClose, onAddDish, categoryName }) {
 
         <div className="flex gap-4 mb-3">
           <div className="flex-1">
-            <p className="text-sm text-gray-600 mb-1">Food name</p>
+            <p className="text-sm font-medium mb-1">Food name</p>
             <input
               className="w-full border rounded-lg p-3 text-sm"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Dish name..."
+              placeholder="Type food name"
             />
           </div>
           <div className="w-[120px]">
-            <p className="text-sm text-gray-600 mb-1">Food price</p>
+            <p className="text-sm font-medium mb-1">Food price</p>
             <input
               className="w-full border rounded-lg p-3 text-sm"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              placeholder="$0.00"
+              placeholder="Enter price..."
             />
           </div>
         </div>
 
-        <p className="text-sm text-gray-600 mb-1">Ingredients</p>
+        <p className="text-sm font-mediummb-1">Ingredients</p>
         <textarea
           className="border rounded-lg w-full h-20 p-3 text-sm mb-4"
           value={ingredients}
           onChange={(e) => setIngredients(e.target.value)}
-          placeholder="Write ingredients..."
+          placeholder="List ingredients..."
         />
 
-        <p className="text-sm text-gray-600 mb-1">Food image</p>
-        <label className="cursor-pointer block border-2 border-dashed rounded-lg h-[120px] flex items-center justify-center overflow-hidden">
+        <p className="text-sm font-medium mb-1">Food image</p>
+        <label className="cursor-pointer block border-2 border-dashed bg-[#2563EB33] opacity-20 rounded-lg h-[120px] flex items-center justify-center overflow-hidden">
           {image ? (
             <img src={image} className="w-full h-full object-cover" />
           ) : (
-            <p className="text-gray-400 text-sm">
-              {uploading ? "Uploading..." : "Upload image"}
+            <p className=" text-sm">
+              {uploading
+                ? "Uploading..."
+                : "Choose a file or drag & drop it here"}
             </p>
           )}
           <input type="file" className="hidden" onChange={handleImageUpload} />
         </label>
-
-        <button
-          onClick={handleSubmit}
-          disabled={uploading}
-          className="mt-5 w-full bg-black text-white py-3 rounded-lg text-sm font-medium disabled:bg-gray-400"
-        >
-          {uploading ? "Uploading image..." : "Add Dish"}
-        </button>
+        <div className="w-auto flex justify-end">
+          <button
+            onClick={handleSubmit}
+            disabled={uploading}
+            className="mt-5 w-23.75 bg-black text-white py-3 rounded-lg text-sm font-medium disabled:bg-gray-400"
+          >
+            {uploading ? "Uploading image..." : "Add Dish"}
+          </button>
+        </div>
       </div>
     </div>
   );
