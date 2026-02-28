@@ -84,15 +84,50 @@ export default function Order() {
   };
 
   const handleDeleteCategory = async (index) => {
-    const categoryId = newCategories[index]._id;
+    const category = newCategories[index];
+    const categoryId = category?._id;
+    const categoryName = category?.categoryName || "this category";
+
+    if (!categoryId) return;
+
+    const isConfirmed = window.confirm(
+      `Are you sure you want to delete "${categoryName}"?\nThis cannot be recovered.`,
+    );
+
+    if (!isConfirmed) {
+      toast("Category deletion canceled", {
+        duration: 1800,
+        style: {
+          background: "#111",
+          color: "#fff",
+        },
+      });
+      return;
+    }
+
     try {
       await axios.delete(
         `https://foodapp-back-1p78.onrender.com/api/categories/${categoryId}`,
       );
       setNewCategories(newCategories.filter((_, i) => i !== index));
       if (activeCategoryIndex === index) setActiveCategoryIndex(null);
+
+      toast.success(`"${categoryName}" deleted successfully`, {
+        duration: 2000,
+        style: {
+          background: "#111",
+          color: "#fff",
+        },
+      });
     } catch (err) {
       console.log("DELETE ERROR:", err.response?.data || err);
+      toast.error("Failed to delete category", {
+        duration: 2000,
+        style: {
+          background: "#111",
+          color: "#fff",
+        },
+      });
     }
   };
 

@@ -1,23 +1,33 @@
 "use client";
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axios from "@/lib/axios";
 
 export default function DishModal({ onClose, onAddDish, categoryName }) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [image, setImage] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      if (previewImage?.startsWith("blob:")) {
+        URL.revokeObjectURL(previewImage);
+      }
+    };
+  }, [previewImage]);
 
   const handleSubmit = () => {
     if (!name.trim() || !price.trim()) return;
-    if (!image) return alert("Please wait until image uploads!");
+    if (uploading) return alert("Please wait until image upload finishes.");
+    if (!image) return alert("Please upload an image first.");
 
     const newDish = {
       name,
       price,
       ingredients,
-      image, // ❗Cloudinary URL энд байна
+      image,
       category: categoryName,
     };
 
@@ -29,30 +39,111 @@ export default function DishModal({ onClose, onAddDish, categoryName }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Preview
-    setImage(URL.createObjectURL(file));
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image is too large. Please use a file smaller than 5MB.");
+      return;
+    }
 
-    const reader = new FileReader();
-    reader.onloadend = async () => {
-      setUploading(true);
+    const localPreviewUrl = URL.createObjectURL(file);
+    setPreviewImage(localPreviewUrl);
+    setImage(null);
+    setUploading(true);
+
+    const getUploadedUrl = (payload) =>
+      payload?.url ||
+      payload?.imageUrl ||
+      payload?.secure_url ||
+      payload?.data?.url ||
+      payload?.data?.imageUrl ||
+      payload?.data?.secure_url ||
+      payload?.data?.data?.url ||
+      payload?.data?.data?.imageUrl ||
+      payload?.result?.url ||
+      payload?.result?.secure_url;
+
+    const getErrorMessage = (err) => {
+      const status = err?.response?.status;
+      const data = err?.response?.data;
+      const apiMessage =
+        data?.message ||
+        data?.error ||
+        data?.msg ||
+        (typeof data === "string" ? data : null);
+      const fallback =
+        err?.message ||
+        (status ? `Request failed with status ${status}` : "Upload failed");
+      return apiMessage
+        ? `${apiMessage}${status ? ` (HTTP ${status})` : ""}`
+        : fallback;
+    };
+
+    const tryUpload = async (payload, label) => {
       try {
-        const base64 = reader.result;
-        const res = await axios.post(
-          "https://foodapp-back-1p78.onrender.com/api/upload",
-          {
-            data: base64,
-          },
-        );
-
-        setImage(res.data.url); // ✔ Cloudinary URL боллоо
+        const res = await axios.post("/api/upload", payload);
+        return { ok: true, res };
       } catch (err) {
-        console.log("Upload error", err);
-        alert("Upload failed");
-      } finally {
-        setUploading(false);
+        console.log(`${label} upload attempt failed:`, err?.response?.data || err);
+        return { ok: false, err };
       }
     };
-    reader.readAsDataURL(file);
+
+    try {
+      const fdFile = new FormData();
+      fdFile.append("file", file);
+
+      const fdImage = new FormData();
+      fdImage.append("image", file);
+
+      const reader = new FileReader();
+      const base64 = await new Promise((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      const attempts = [
+        { label: "multipart:file", payload: fdFile },
+        { label: "multipart:image", payload: fdImage },
+        { label: "base64:data", payload: { data: base64 } },
+        { label: "base64:image", payload: { image: base64 } },
+      ];
+
+      let uploadedUrl = null;
+      let lastError = null;
+
+      for (const attempt of attempts) {
+        const result = await tryUpload(attempt.payload, attempt.label);
+        if (!result.ok) {
+          lastError = result.err;
+          continue;
+        }
+
+        uploadedUrl = getUploadedUrl(result.res?.data);
+        if (uploadedUrl) break;
+      }
+
+      if (!uploadedUrl) {
+        if (lastError) throw lastError;
+        throw new Error("Upload succeeded but response URL was missing.");
+      }
+
+      setImage(uploadedUrl);
+    } catch (err) {
+      const message = getErrorMessage(err);
+      console.log("Upload error:", err?.response?.data || err);
+      if (err?.response?.data) {
+        alert(`${message}\n${JSON.stringify(err.response.data)}`);
+      } else {
+        alert(message);
+      }
+      setImage(null);
+    } finally {
+      setUploading(false);
+    }
   };
 
   return (
@@ -100,8 +191,8 @@ export default function DishModal({ onClose, onAddDish, categoryName }) {
 
         <p className="text-sm font-medium mb-1">Food image</p>
         <label className="cursor-pointer block border-2 border-dashed bg-[#2563EB33] opacity-20 rounded-lg h-[120px] flex items-center justify-center overflow-hidden">
-          {image ? (
-            <img src={image} className="w-full h-full object-cover" />
+          {previewImage || image ? (
+            <img src={previewImage || image} className="w-full h-full object-cover" />
           ) : (
             <p className=" text-sm">
               {uploading

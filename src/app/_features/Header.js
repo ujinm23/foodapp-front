@@ -9,12 +9,15 @@ import Purchase from "../_icons/Purchase";
 import Right from "../_icons/Right";
 import { UserIcon } from "../_icons/UserIcon";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 
 export default function Header({ openCart }) {
   const router = useRouter();
   const { user, logout, isAdmin } = useAuth();
+  const { getCartItemCount } = useCart();
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const cartItemCount = getCartItemCount();
 
   useEffect(() => {
     // Dropdown-ийг гадна дарахад хаах
@@ -82,9 +85,14 @@ export default function Header({ openCart }) {
 
           <div
             onClick={openCart}
-            className="rounded-[50px] bg-white w-9 h-9 flex items-center justify-center cursor-pointer"
+            className="relative rounded-[50px] bg-white w-9 h-9 flex items-center justify-center cursor-pointer"
           >
             <Purchase />
+            {cartItemCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 bg-[#EF4444] text-white text-[10px] font-semibold rounded-full flex items-center justify-center leading-none">
+                {cartItemCount}
+              </span>
+            )}
           </div>
 
           <div className="relative" ref={dropdownRef}>
