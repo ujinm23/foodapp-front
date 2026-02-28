@@ -153,7 +153,7 @@ export default function Step3({ reduceStep }) {
             type="button"
             onClick={handleNext}
             disabled={!validEmail || !password || loading}
-            className={`w-[416px] h-9 mb-6 cursor-pointer ${
+            className={`w-104 h-9 mb-6 cursor-pointer ${
               validEmail && password && !loading
                 ? "bg-[#18181B] text-white"
                 : "bg-gray-300 text-gray-500"
@@ -187,6 +187,17 @@ export default function Step3({ reduceStep }) {
               "Continue"
             )}
           </Button>
+          <div className="w-104 justify-center flex">
+            <div className="flex gap-3">
+              <p className="text-[#71717A]">Don’t have an account?</p>
+              <button
+                className="text-[#2563EB] underline"
+                onClick={() => router.push("/sign-up")}
+              >
+                Sign up
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
